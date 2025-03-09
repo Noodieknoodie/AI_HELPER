@@ -84,11 +84,6 @@ class MessagePanel(QWidget):
         layout.addWidget(hint_label)
     
     def set_prompt(self, prompt_data):
-        """Set the prompt data.
-        
-        Args:
-            prompt_data: Dictionary with prompt and reminder text.
-        """
         self.prompt_data = prompt_data
         
         # Update prompt block
@@ -122,11 +117,6 @@ class MessagePanel(QWidget):
                     break
     
     def update_files(self, selected_files):
-        """Update selected files.
-        
-        Args:
-            selected_files: Dictionary with code and context files.
-        """
         self.selected_files = selected_files
         
         # Check if we need to add/remove blocks
@@ -228,14 +218,6 @@ class MessagePanel(QWidget):
         self.preview_edit.setVisible(False)
     
     def get_assembled_message(self, substitute_files=True):
-        """Get the assembled message with variable substitution.
-        
-        Args:
-            substitute_files: Whether to substitute file content variables.
-            
-        Returns:
-            Assembled message text.
-        """
         # Get blocks content
         blocks_content = ""
         

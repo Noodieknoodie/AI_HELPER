@@ -145,29 +145,12 @@ class FileManager:
         return files
     
     def get_unique_extensions(self, files: Optional[List[Dict[str, Any]]] = None) -> Set[str]:
-        """Get unique file extensions from the project.
-        
-        Args:
-            files: List of file information dictionaries.
-                 If None, gets all project files.
-                 
-        Returns:
-            Set of unique file extensions.
-        """
         if files is None:
             files = self.get_project_files()
         
         return {file['extension'] for file in files if file['extension']}
     
     def read_file(self, path: str) -> str:
-        """Read and return the content of a file.
-        
-        Args:
-            path: Path to the file (absolute or relative to project root).
-            
-        Returns:
-            String content of the file.
-        """
         try:
             if os.path.isabs(path):
                 file_path = path
@@ -180,15 +163,6 @@ class FileManager:
             return f"Error reading file: {str(e)}"
     
     def compile_files(self, files: List[Dict[str, Any]], cleaning_options=None) -> str:
-        """Compile content from multiple files with separators.
-        
-        Args:
-            files: List of file information dictionaries.
-            cleaning_options: Dictionary of cleaning options.
-                             
-        Returns:
-            String with compiled file content.
-        """
         if not files:
             return ""
             
@@ -236,11 +210,6 @@ class FileManager:
         return "\n".join(compiled)
     
     def get_prompts(self) -> Dict[str, Dict[str, Any]]:
-        """Get all prompts from the prompts directory.
-        
-        Returns:
-            Dictionary mapping prompt IDs to prompt data dictionaries.
-        """
         prompts = {}
         
         # Load JSON prompts
@@ -276,14 +245,6 @@ class FileManager:
         return prompts
     
     def get_prompt(self, prompt_id: str) -> Optional[Dict[str, Any]]:
-        """Get a specific prompt by ID.
-        
-        Args:
-            prompt_id: ID of the prompt.
-            
-        Returns:
-            Prompt data dictionary or None if not found.
-        """
         # Try JSON first
         json_path = self.prompts_dir / f"{prompt_id}.json"
         if json_path.exists():
@@ -310,15 +271,6 @@ class FileManager:
         return None
     
     def save_prompt(self, prompt_id: str, prompt_data: Dict[str, Any]) -> bool:
-        """Save a prompt to a JSON file.
-        
-        Args:
-            prompt_id: ID for the prompt (will be used as filename).
-            prompt_data: Dictionary with prompt data (name, prompt, reminder).
-            
-        Returns:
-            Boolean indicating success.
-        """
         try:
             # Sanitize prompt ID for filename
             safe_id = re.sub(r'[^\w\-_]', '_', prompt_id.lower())
@@ -333,14 +285,6 @@ class FileManager:
             return False
     
     def delete_prompt(self, prompt_id: str) -> bool:
-        """Delete a prompt file.
-        
-        Args:
-            prompt_id: ID of the prompt to delete.
-            
-        Returns:
-            Boolean indicating success.
-        """
         try:
             # Try to delete JSON file
             json_path = self.prompts_dir / f"{prompt_id}.json"
@@ -359,15 +303,6 @@ class FileManager:
             return False
     
     def save_output(self, content, task_name):
-        """Save output to a file in the outputs directory.
-        
-        Args:
-            content: Content to save.
-            task_name: Type of task (used in filename).
-            
-        Returns:
-            Path to the saved file.
-        """
         # Generate filename
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         project_name = self.project_root.name

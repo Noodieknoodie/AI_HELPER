@@ -39,13 +39,99 @@ DEFAULT_CONFIG = {
         },
         "openai": {
             "url": "https://api.openai.com/v1/chat/completions",
+            "version": "2023-06-01",
             "models": [
-                {"id": "gpt-4o", "name": "GPT-4o"},
-                {"id": "gpt-4-turbo", "name": "GPT-4 Turbo"},
-                {"id": "gpt-4", "name": "GPT-4"},
-                {"id": "gpt-3.5-turbo", "name": "GPT-3.5 Turbo"}
+                {
+                    "id": "o1",
+                    "name": "OpenAI o1",
+                    "capabilities": {
+                        "context_window": 200000,
+                        "max_tokens_default": 16000,
+                        "max_completion_tokens": 100000,
+                        "supports_reasoning": True
+                    }
+                },
+                {
+                    "id": "o3-mini",
+                    "name": "OpenAI o3-mini",
+                    "capabilities": {
+                        "context_window": 200000,
+                        "max_tokens_default": 16000,
+                        "max_completion_tokens": 100000,
+                        "supports_reasoning": True
+                    }
+                },
+                {
+                    "id": "gpt-4.5-preview",
+                    "name": "GPT-4.5 Preview",
+                    "capabilities": {
+                        "context_window": 128000,
+                        "max_tokens_default": 16384
+                    }
+                },
+                {
+                    "id": "gpt-4o",
+                    "name": "GPT-4o",
+                    "capabilities": {
+                        "context_window": 128000,
+                        "max_tokens_default": 16384
+                    }
+                }
             ],
             "default_model": "gpt-4o"
+        },
+        "gemini": {
+            "library": "google-genai",
+            "models": [
+                {
+                    "id": "gemini-1.5-pro",
+                    "name": "Gemini 1.5 Pro",
+                    "capabilities": {
+                        "context_window": 2097152,
+                        "max_tokens_default": 8192,
+                        "input_token_limit": 2097152,
+                        "output_token_limit": 8192,
+                        "supports_vision": True,
+                    }
+                },
+                {
+                    "id": "gemini-2.0-pro-exp",
+                    "name": "Gemini 2.0 Pro (Experimental)",
+                    "capabilities": {
+                        "context_window": 1048576,
+                        "max_tokens_default": 8192,
+                        "input_token_limit": 1048576,
+                        "output_token_limit": 8192,
+                        "supports_vision": True,
+                    }
+                },
+                {
+                    "id": "gemini-2.0-flash",
+                    "name": "Gemini 2.0 Flash",
+                    "capabilities": {
+                        "context_window": 1048576,
+                        "max_tokens_default": 8192,
+                        "input_token_limit": 1048576,
+                        "output_token_limit": 8192,
+                        "supports_vision": True,
+                        "supports_audio": True,
+                        "supports_video": True
+                    }
+                },
+                {
+                    "id": "gemini-2.0-flash-thinking-exp",
+                    "name": "Gemini 2.0 Flash Thinking",
+                    "capabilities": {
+                        "context_window": 1048576,
+                        "max_tokens_default": 8192,
+                        "input_token_limit": 1048576,
+                        "output_token_limit": 8192,
+                        "supports_thinking": True,
+                        "supports_vision": True,
+                    }
+                }
+            ],
+            "default_model": "gemini-2.0-flash"
         }
     },
     "default_api": "anthropic",

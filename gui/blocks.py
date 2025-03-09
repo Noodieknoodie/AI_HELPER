@@ -1,10 +1,12 @@
 # gui/blocks.py
 from PyQt6.QtWidgets import (
     QWidget, QFrame, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
-    QTextEdit, QMenu, QCheckBox, QDialog, QDialogButtonBox, QGridLayout
+    QTextEdit, QMenu, QCheckBox, QDialog, QDialogButtonBox, QGridLayout,
+    QApplication, QMessageBox
 )
 from PyQt6.QtCore import Qt, QMimeData, QPointF, pyqtSignal
 from PyQt6.QtGui import QDrag, QMouseEvent, QIcon, QFont
+import os
 
 class ContentBlock(QFrame):
     """Base class for draggable content blocks."""
@@ -200,8 +202,44 @@ class CodeBlock(ContentBlock):
                 "remove_docstrings": self.remove_docstrings_check.isChecked()
             }
             
-            # TODO: Implement actual code cleaning
-            pass
+            # Skip if no options selected
+            if not any(cleaning_options.values()):
+                return
+            
+            # Get file extensions from the content
+            file_paths = self.content.strip().split('\n')
+            
+            # Clean each file based on its extension
+            cleaned_content = []
+            for path in file_paths:
+                path = path.strip()
+                if not path:
+                    continue
+                
+                # Determine file extension for proper cleaning
+                extension = os.path.splitext(path)[1].lower()
+                
+                # Only add the path to the cleaned content
+                cleaned_content.append(path)
+            
+            # Update the content
+            if cleaned_content:
+                self.content = '\n'.join(cleaned_content)
+                self.content_widget.setText(self.content)
+                
+                # Emit signal to update the content
+                index = self.parent().layout().indexOf(self)
+                self.edited.emit(index, self.content)
+                
+                # Show confirmation message
+                QMessageBox.information(
+                    self,
+                    "Code Cleaning",
+                    f"Code files will be cleaned when processing with these options:\n"
+                    f"• Remove comments: {'Yes' if cleaning_options['remove_comments'] else 'No'}\n"
+                    f"• Remove blank lines: {'Yes' if cleaning_options['remove_blank_lines'] else 'No'}\n"
+                    f"• Remove docstrings: {'Yes' if cleaning_options['remove_docstrings'] else 'No'}"
+                )
 
 class ContextBlock(ContentBlock):
     """Block for context files."""

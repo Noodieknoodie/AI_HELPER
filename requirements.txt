@@ -1,0 +1,8 @@
+anthropic
+openai
+protobuf
+PyQt6
+PyQt6_sip
+python-dotenv
+Requests
+google.generativeai

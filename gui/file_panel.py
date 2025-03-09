@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import (
     Qt, QAbstractItemModel, QModelIndex, 
-    QSortFilterProxyModel, QDir, Signal, pyqtSignal
+    QSortFilterProxyModel, QDir, pyqtSignal
 )
 from PyQt6.QtGui import (
     QIcon, QColor, QBrush, QFont

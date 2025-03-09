@@ -1,66 +1,30 @@
 # core/utils.py
 import os
 import json
-import keyring
 from pathlib import Path
 from typing import Dict, Any, Optional
 
 class ApiKeyManager:
-    """Manages API keys for LLM services."""
-    SERVICE_NAME = "ai_helper"
+
     
     @staticmethod
-    def save_api_key(provider: str, api_key: str):
-        """Save API key to system keyring.
-        
-        Args:
-            provider: Provider name.
-            api_key: API key to save.
-        """
-        keyring.set_password(ApiKeyManager.SERVICE_NAME, provider, api_key)
+    def save_api_key(config, provider: str, api_key: str):
+        from core.api_keys import save_key
+        return save_key(config, provider, api_key)
     
     @staticmethod
-    def get_api_key(provider: str) -> Optional[str]:
-        """Get API key from system keyring.
-        
-        Args:
-            provider: Provider name.
-            
-        Returns:
-            API key or None if not found.
-        """
-        try:
-            return keyring.get_password(ApiKeyManager.SERVICE_NAME, provider)
-        except:
-            return None
+    def get_api_key(config, provider: str):
+        from core.api_keys import load_keys
+        keys = load_keys(config)
+        return keys.get(provider, "")
     
     @staticmethod
-    def delete_api_key(provider: str):
-        """Delete API key from system keyring.
-        
-        Args:
-            provider: Provider name.
-            
-        Returns:
-            Boolean indicating success.
-        """
-        try:
-            keyring.delete_password(ApiKeyManager.SERVICE_NAME, provider)
-            return True
-        except:
-            return False
+    def delete_api_key(config, provider: str):
+        from core.api_keys import save_key
+        return save_key(config, provider, "")
 
 def clean_code(content: str, extension: str, options: Dict[str, bool]) -> str:
-    """Clean code based on options.
-    
-    Args:
-        content: Code content to clean.
-        extension: File extension.
-        options: Cleaning options.
-        
-    Returns:
-        Cleaned code.
-    """
+
     if not options:
         return content
         
@@ -119,26 +83,9 @@ def clean_code(content: str, extension: str, options: Dict[str, bool]) -> str:
     return '\n'.join(result)
 
 def estimate_tokens(text: str) -> int:
-    """Estimate token count for a text string.
-    
-    Args:
-        text: Text to estimate tokens for.
-        
-    Returns:
-        Estimated token count.
-    """
-    # Rough estimation: ~4 characters per token for English text
     return len(text) // 4
 
 def format_file_size(size_bytes: int) -> str:
-    """Format file size in human-readable format.
-    
-    Args:
-        size_bytes: Size in bytes.
-        
-    Returns:
-        Human-readable size string.
-    """
     for unit in ['B', 'KB', 'MB', 'GB']:
         if size_bytes < 1024:
             return f"{size_bytes:.1f} {unit}" if size_bytes >= 100 else f"{size_bytes:.2f} {unit}"
@@ -184,11 +131,6 @@ def get_file_icon_path(extension: str) -> str:
     return icon_path
 
 def get_active_icon_paths():
-    """Return paths to active icons needed by the application.
-    
-    Returns:
-        Dictionary of icon paths.
-    """
     script_dir = os.path.dirname(os.path.abspath(__file__))
     resources_dir = os.path.join(os.path.dirname(script_dir), 'resources', 'icons')
     
